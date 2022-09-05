@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab1</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <img id="cookieImage" src="cookie.png" alt="cute cookie">
+    <div class="hat">
+        <p>Krivosheev Andrey Aleksandrovich, P32111, case 1909</p>
+    </div>
+    <br>
+    <div>
+        <canvas id="plotCanvas" width="300" height="300"></canvas>
+    </div>
+    <br>
+    <div>
+        <form id="submitForm" method="get">
+            <p>
+                Enter parameters
+            </p>
+            <p>
+                <label for="xTextField">X: </label>
+                <input id="xTextField" name="xValue" type="text"
+                       title="X coordinate (-3 &#8804; X &#8804; 5)"
+                       placeholder="-3 &#8804; X &#8804; 5" maxlength="10">
+                <small class="error-text"></small>
+            </p>
+            <p>
+                <label for="yTextField">Y: </label>
+                <input id="yTextField" name="yValue" type="text"
+                       title="Y coordinate (-3 &#8804; Y &#8804; 3)"
+                       placeholder="-3 &#8804; Y &#8804; 3" maxlength="10">
+                <small class="error-text"></small>
+            </p>
+            <p>
+                <label for="rTextField">R: </label>
+                <input id="rTextField" name="rValue" type="text"
+                       title="R radius (R &#8805; 0)"
+                       placeholder="R &#8805; 0" maxlength="10">
+                <small class="error-text"></small>
+            </p>
+            <p>
+                <input id="submitButton" type="submit" value="I'm lucky">
+            </p>
+        </form>
+    </div>
+    <br>
+    <div>
+        <p>
+            History
+        </p>
+        <table id="historyTable">
+            <thead>
+                <tr>
+                    <td class="number-col">#</td>
+                    <td class="time-col">Time</td>
+                    <td class="exec-time-col">Execution time</td>
+                    <td class="x-col">X</td>
+                    <td class="y-col">Y</td>
+                    <td class="r-col">R</td>
+                    <td class="result-col">Result</td>
+                </tr>
+            </thead>
+            <tbody id="historyTableContent">
+
+            </tbody>
+        </table>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="validator.js"></script>
+</body>
+</html>

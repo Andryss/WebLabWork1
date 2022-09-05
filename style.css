@@ -1,0 +1,128 @@
+* {
+    font-family: "Comic Sans MS", serif;
+}
+
+#cookieImage {
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+}
+
+div.hat {
+    font-family: sans-serif;
+    color: #010101;
+    font-size: 20px;
+    background-color: #EDB88B;
+}
+
+div {
+    border: 1px dashed black;
+    border-radius: 5px;
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: center;
+}
+
+canvas {
+    margin: 5px;
+}
+
+.error-text {
+    margin-left: 5px;
+    color: red;
+}
+
+input[type="text"] {
+    margin-left: 3px;
+    border-radius: 5px;
+}
+
+input[type="text"] + small::after {
+    position: absolute;
+}
+
+input[type="text"].valid {
+    border-color: green;
+    background-color: rgba(0, 255, 0, 0.2);
+    transition: 500ms;
+}
+
+input[type="text"].invalid {
+    border-color: red;
+    background-color: rgba(255, 0, 0, 0.2);
+    transition: 500ms;
+}
+
+#xTextField.out-of-range + small::after {
+    content: "x must be in range (-3...5)";
+}
+
+#yTextField.out-of-range + small::after {
+    content: "y must be in range (-3...3)";
+}
+
+#rTextField.out-of-range + small::after {
+    content: "r must be positive";
+}
+
+#xTextField.not-a-number + small::after,
+#yTextField.not-a-number + small::after,
+#rTextField.not-a-number + small::after {
+    content: "enter the number";
+}
+
+#xTextField.blank + small::after,
+#yTextField.blank + small::after,
+#rTextField.blank + small::after {
+    content: "field can't be blank";
+}
+
+table {
+    width: 100%;
+}
+
+thead {
+    background-color: #1AD8D5;
+}
+
+td {
+    text-align: center;
+}
+
+td.number-col {
+    width: 3%;
+}
+
+td.time-col {
+    width: 40%;
+}
+
+td.exec-time-col {
+    width: 15%;
+}
+
+td.x-col,
+td.y-col,
+td.r-col {
+    width: 10%;
+}
+
+td.result-col {
+    width: 12%;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #ecfffd;
+}
+
+tbody tr:nth-child(odd):hover {
+    background-color: #dbecea;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #aafffc;
+}
+
+tbody tr:nth-child(even):hover {
+    background-color: #9dece9;
+}
