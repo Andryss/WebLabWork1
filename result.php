@@ -75,25 +75,26 @@ if (isset($_GET["xValue"]) && is_numeric($_GET["xValue"]) &&
 }
 
 // form response html page
-$dom = new DOMDocument();
-$dom->loadHTMLFile("answer.html");
-$header = $dom->getElementById("lastResponseStatus");
-$header->append($status);
-$table = $dom->getElementById("responseTable");
+//$dom = new DOMDocument("1.0");
+//$dom->loadHTMLFile("answer.html");
+//$header = $dom->getElementById("lastResponseStatus");
+//$header->append($status);
+//$table = $dom->getElementById("responseTable");
 
-// fill response html
-foreach ($history as $index => $tmpResponse) {
-    if ($tmpResponse != null) {
-        $tr = $dom->createElement("tr");
-        $tr->appendChild($dom->createElement("td", $index + 1));
-        foreach ($tmpResponse as $item) {
-            $tr->appendChild($dom->createElement("td", $item));
-        }
-        $table->appendChild($tr);
-    }
-}
+//// fill response html
+//foreach ($history as $index => $tmpResponse) {
+//    if ($tmpResponse != null) {
+//        $tr = $dom->createElement("tr");
+//        $tr->appendChild($dom->createElement("td", $index + 1));
+//        foreach ($tmpResponse as $item) {
+//            $tr->appendChild($dom->createElement("td", $item));
+//        }
+//        $table->appendChild($tr);
+//    }
+//}
+//
 
 // update cookie
 setcookie("history", json_encode($history), time() + 60);
 
-echo $dom->saveHTML();
+echo json_encode($history);

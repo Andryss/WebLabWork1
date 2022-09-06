@@ -11,7 +11,7 @@ cookieImage.on("click", function (event) {
     if (Math.random() > 0.2) {
         alert("This site uses cookies, but you are not asked ._.");
     } else {
-        alert("Don't crumble your cookies here");
+        alert("Don't crumble your cookies here!");
     }
 })
 
@@ -91,12 +91,6 @@ function makeValid(textField) {
 }
 
 
-
-submitForm.on("submit", function (event) {
-    event.preventDefault();
-    validateForm();
-})
-
 function validateForm() {
     if (validateFields()) {
         sendFormToServer();
@@ -111,27 +105,76 @@ function sendFormToServer() {
     $.ajax({
         type: "GET",
         url: "result.php",
+        dataType: "json",
         data: {
             "xValue": xTextField.val(),
             "yValue": yTextField.val(),
             "rValue": rTextField.val()
-        },
-        success: function (res) {
-            handleResponse(res);
-        },
-        error: function (msg) {
-            alert("Something went wrong: " + msg);
-        },
-        complete: function () {
-            clearForm();
         }
-    })
+    }).done(function (res) {
+        handleResponse(res);
+    }).fail(function (msg, exception) {
+        alert("Something wrong: " + msg.status + " " + exception);
+    }).always(function () {
+        clearForm();
+    });
+
+    // let xhr;
+    // if (window.XMLHttpRequest) { xhr=new XMLHttpRequest(); }
+    // else { xhr=new ActiveXObject("Microsoft.XMLHTTP"); }
+    //
+    // xhr.open("GET", "result.php?xValue=" + xTextField.val() + "&yValue=" + yTextField.val() + "&rValue=" + rTextField.val(), true);
+    // xhr.onreadystatechange(function () {
+    //     alert(xhr.responseText);
+    //     if (xhr.readyState === 4 && xhr.status === 200) handleResponse(xhr.responseText);
+    //     clearForm();
+    // })
+    // xhr.send();
 }
 
 function handleResponse(response) {
-    const html = document.createElement("html");
-    html.innerHTML = response;
-    historyTableContent.html(html.getElementsByTagName("tr"));
+    // TODO: make json handling more fluent
+
+    const htmlTable = document.createElement("table");
+    for (let i = 0; i < response.length; i++) {
+        const element = response[i];
+        if (element != null) {
+            const htmlRow = document.createElement("tr");
+
+            const numCol = document.createElement("td");
+            numCol.append("" + (i + 1));
+            htmlRow.appendChild(numCol);
+
+            const timeCol = document.createElement("td");
+            timeCol.append(element["time"]);
+            htmlRow.appendChild(timeCol);
+
+            const execCol = document.createElement("td");
+            execCol.append(element["executionTime"]);
+            htmlRow.appendChild(execCol);
+
+            const xCol = document.createElement("td");
+            xCol.append(element["xValue"]);
+            htmlRow.appendChild(xCol);
+
+            const yCol = document.createElement("td");
+            yCol.append(element["yValue"]);
+            htmlRow.appendChild(yCol);
+
+            const rCol = document.createElement("td");
+            rCol.append(element["rValue"]);
+            htmlRow.appendChild(rCol);
+
+            const resultCol = document.createElement("td");
+            resultCol.append(element["result"]);
+            htmlRow.appendChild(resultCol);
+
+
+            htmlTable.appendChild(htmlRow);
+        }
+    }
+
+    historyTableContent.html(htmlTable.innerHTML);
 }
 
 function clearForm() {
@@ -219,3 +262,8 @@ function drawPlotOnCanvas() {
         ctx.fillText("Y", 150 - 15 - 7, 150 - 140 + 7);
     }
 }
+
+submitForm.on("submit", function (event) {
+    event.preventDefault();
+    validateForm();
+})
