@@ -1,28 +1,33 @@
+"use strict";
+
 const cookieImage = $("#cookieImage");
 const xTextField = $("#xTextField");
 const yTextField = $("#yTextField");
 const rTextField = $("#rTextField");
 const submitForm = $("#submitForm");
-const historyTable = $("#historyTable");
 const historyTableContent = $("#historyTableContent");
 
 
-cookieImage.on("click", function (event) {
+cookieImage.on("click", function () {
     if (Math.random() > 0.2) {
-        alert("This site uses cookies, but you are not asked ._.");
+        alert("This site uses cookies, but you are not asked :>");
     } else {
         alert("Don't crumble your cookies here!");
     }
 })
 
-const simpleNumberPattern = /^-?\d+(\.\d+)?$/
-const numberPattern = /^((-?[1-9]\d*(\.\d+)?)|([0](\.\d+)?)|(-[0]\.\d+))$/
+const numberPattern = /^((-?[1-9]\d*(\.\d+)?)|(0(\.\d+)?)|(-0\.\d+))$/
 
 const eventsToValidate = ["keyup", "keydown"]
 eventsToValidate.forEach(function (event) {
-    xTextField.on(event, function (event) { validateXField() })
-    yTextField.on(event, function (event) { validateYField() })
-    rTextField.on(event, function (event) { validateRField() })
+    xTextField.on(event, function () { validateXField() })
+    yTextField.on(event, function () { validateYField() })
+    rTextField.on(event, function () { validateRField() })
+})
+
+submitForm.on("submit", function (event) {
+    event.preventDefault();
+    validateForm();
 })
 
 function validateXField() {
@@ -109,7 +114,8 @@ function sendFormToServer() {
         data: {
             "xValue": xTextField.val(),
             "yValue": yTextField.val(),
-            "rValue": rTextField.val()
+            "rValue": rTextField.val(),
+            "timezoneOffset": -(new Date().getTimezoneOffset())
         }
     }).done(function (res) {
         handleResponse(res);
@@ -118,62 +124,32 @@ function sendFormToServer() {
     }).always(function () {
         clearForm();
     });
-
-    // let xhr;
-    // if (window.XMLHttpRequest) { xhr=new XMLHttpRequest(); }
-    // else { xhr=new ActiveXObject("Microsoft.XMLHTTP"); }
-    //
-    // xhr.open("GET", "result.php?xValue=" + xTextField.val() + "&yValue=" + yTextField.val() + "&rValue=" + rTextField.val(), true);
-    // xhr.onreadystatechange(function () {
-    //     alert(xhr.responseText);
-    //     if (xhr.readyState === 4 && xhr.status === 200) handleResponse(xhr.responseText);
-    //     clearForm();
-    // })
-    // xhr.send();
 }
 
 function handleResponse(response) {
-    // TODO: make json handling more fluent
-
     const htmlTable = document.createElement("table");
     for (let i = 0; i < response.length; i++) {
         const element = response[i];
         if (element != null) {
             const htmlRow = document.createElement("tr");
-
             const numCol = document.createElement("td");
             numCol.append("" + (i + 1));
             htmlRow.appendChild(numCol);
-
-            const timeCol = document.createElement("td");
-            timeCol.append(element["time"]);
-            htmlRow.appendChild(timeCol);
-
-            const execCol = document.createElement("td");
-            execCol.append(element["executionTime"]);
-            htmlRow.appendChild(execCol);
-
-            const xCol = document.createElement("td");
-            xCol.append(element["xValue"]);
-            htmlRow.appendChild(xCol);
-
-            const yCol = document.createElement("td");
-            yCol.append(element["yValue"]);
-            htmlRow.appendChild(yCol);
-
-            const rCol = document.createElement("td");
-            rCol.append(element["rValue"]);
-            htmlRow.appendChild(rCol);
-
-            const resultCol = document.createElement("td");
-            resultCol.append(element["result"]);
-            htmlRow.appendChild(resultCol);
-
-
+            [
+                "time",
+                "executionTime",
+                "xValue",
+                "yValue",
+                "rValue",
+                "result"
+            ].forEach((prop) => {
+                const col = document.createElement("td");
+                col.append(element[prop]);
+                htmlRow.appendChild(col);
+            })
             htmlTable.appendChild(htmlRow);
         }
     }
-
     historyTableContent.html(htmlTable.innerHTML);
 }
 
@@ -186,18 +162,6 @@ function clearForm() {
     yTextField.removeClass("valid");
     rTextField.removeClass("valid");
 }
-
-// const submitButton = document.getElementById("submitButton");
-// const submitButtonParent = submitButton.parentElement;
-// submitButton.addEventListener('mouseenter', function (event) {
-//     let submitButtonBound;
-//     do {
-//         submitButton.style.left = (Math.random() * (submitButtonParent.clientWidth - submitButton.clientWidth)) + "px";
-//         submitButton.style.top = (Math.random() * (submitButtonParent.clientHeight - submitButton.clientHeight)) + "px";
-//         submitButtonBound = submitButton.getBoundingClientRect();
-//     } while (event.x >= submitButtonBound.x && event.x <= submitButtonBound.x + submitButtonBound.width &&
-//         event.y >= submitButtonBound.y && event.y <= submitButtonBound.y + submitButtonBound.height)
-// })
 
 drawPlotOnCanvas();
 
@@ -262,8 +226,3 @@ function drawPlotOnCanvas() {
         ctx.fillText("Y", 150 - 15 - 7, 150 - 140 + 7);
     }
 }
-
-submitForm.on("submit", function (event) {
-    event.preventDefault();
-    validateForm();
-})

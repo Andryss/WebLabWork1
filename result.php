@@ -9,7 +9,7 @@
  *      yValue - Y coordinate,
  *      rValue - R radius
  * OUTPUT:
- *      html page with last response status and last 10 success responses
+ *      json with last 10 success responses
  *
  * Each response consist of:
  *      status - status of the request,
@@ -19,7 +19,12 @@
  *      result - the computation result
  */
 
-date_default_timezone_set('Europe/Moscow');
+// some tricks with timezone
+if (isset($_GET["timezoneOffset"]) && $_GET["timezoneOffset"]) {
+    date_default_timezone_set(timezone_name_from_abbr("", $_GET["timezoneOffset"] * 60, false));
+} else {
+    date_default_timezone_set('America/New_York');
+}
 
 // start execution timer
 $msStart = microtime(true) * 1000;

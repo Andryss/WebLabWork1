@@ -6,6 +6,7 @@
     position: fixed;
     right: 5px;
     bottom: 5px;
+    cursor: pointer;
 }
 
 div.hat {
